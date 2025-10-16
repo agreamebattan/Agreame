@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agreame</title>
+    <style>
+        /* RESET & BASE */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: #000;
+            color: #fff;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            cursor: pointer;
+        }
+
+        /* HEADER & NAV */
+        header {
+            position: fixed;
+            width: 100%;
+            background: #000;
+            padding: 15px 20px;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.3s;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+        }
+
+        header.scrolled {
+            background: #111;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #fff;
+            z-index: 1001;
+            position: relative;
+            transition: transform 0.3s;
+        }
+
+        .logo:hover {
+            transform: scale(1.1);
+        }
+
+        nav {
+            display: flex;
+            gap: 25px;
+        }
+
+        nav a {
+            color: #fff;
+            font-weight: bold;
+            position: relative;
+            padding: 5px 0;
+            transition: 0.3s;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background: red;
+            left: 0;
+            bottom: -3px;
+            transition: 0.3s;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        /* HERO SECTION */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: fadeIn 1s ease forwards;
+            opacity: 0;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            color: #f00;
+            animation: fadeIn 1.5s ease forwards;
+            opacity: 0;
+        }
+
+        /* SECTIONS */
+        section {
+            padding: 120px 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #f00;
+            position: relative;
+        }
+
+        section h2::after {
+            content: '';
+            width: 60px;
+            height: 3px;
+            background: #f00;
+            display: block;
+            margin: 10px auto 0;
+            border-radius: 3px;
+        }
+
+        section p {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        /* CARDS & BRANDS */
+        .cards {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 40px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .brand-logo {
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 10px;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(50px);
+            flex: 1 1 120px;
+            max-width: 150px;
+        }
+
+        .brand-logo:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 15px rgba(255, 0, 0, 0.7);
+        }
+
+        .brand-logo img {
+            width: 100%;
+            height: auto;
+            max-width: 120px;
+            filter: brightness(0) invert(1);
+        }
+
+        /* White logos */
+
+        /* FOOTER */
+        footer {
+            background: #111;
+            color: #fff;
+            border-top: 1px solid #222;
+            padding: 15px 20px;
+        }
+
+        .footer-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1000px;
+            margin: 0 auto;
+            flex-wrap: nowrap;
+        }
+
+        .footer-left {
+            text-align: left;
+            font-size: 0.95rem;
+        }
+
+        .footer-center {
+            flex: 1;
+            text-align: center;
+        }
+
+        .footer-right a {
+            margin-left: 15px;
+            display: inline-block;
+            transition: transform 0.3s;
+        }
+
+        .footer-right a:hover {
+            transform: scale(1.2);
+        }
+
+        .social-icon {
+            width: 25px;
+            height: 25px;
+            filter: brightness(0) invert(1);
+        }
+
+        /* MOBILE RESPONSIVE */
+        @media(max-width:768px) {
+            nav {
+                position: fixed;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: #111;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 40px;
+                transition: left 0.4s ease;
+                z-index: 1000;
+            }
+
+            nav.open {
+                left: 0;
+            }
+
+            nav a {
+                font-size: 2rem;
+                color: #fff;
+            }
+
+            .menu-toggle {
+                display: block;
+                cursor: pointer;
+                width: 30px;
+                height: 25px;
+                position: relative;
+                z-index: 1100;
+            }
+
+            .menu-toggle span {
+                position: absolute;
+                height: 3px;
+                width: 100%;
+                background: #fff;
+                left: 0;
+                transition: 0.3s;
+                border-radius: 2px;
+            }
+
+            .menu-toggle span:nth-child(1) {
+                top: 0;
+            }
+
+            .menu-toggle span:nth-child(2) {
+                top: 11px;
+            }
+
+            .menu-toggle span:nth-child(3) {
+                top: 22px;
+            }
+
+            .menu-toggle.active span:nth-child(1) {
+                transform: rotate(45deg);
+                top: 11px;
+            }
+
+            .menu-toggle.active span:nth-child(2) {
+                opacity: 0;
+            }
+
+            .menu-toggle.active span:nth-child(3) {
+                transform: rotate(-45deg);
+                top: 11px;
+            }
+
+            /* Footer mobile */
+            .footer-container {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-left,
+            .footer-right {
+                margin: 5px 0;
+            }
+
+            .footer-right {
+                display: flex;
+                gap: 15px;
+                justify-content: center;
+            }
+
+            .brand-logo {
+                flex: 1 1 100px;
+                max-width: 120px;
+                padding: 15px;
+            }
+
+            .cards {
+                gap: 20px;
+            }
+        }
+
+        /* ANIMATIONS */
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInBanner {
+            from {
+                opacity: 0;
+                transform: translate(-50%, 50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+        }
+
+        /* COOKIE BANNER */
+        #cookie-banner {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #111;
+            color: #fff;
+            padding: 15px 25px;
+            border: 1px solid #222;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            z-index: 2000;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            font-size: 0.95rem;
+            opacity: 0;
+            animation: fadeInBanner 0.8s forwards;
+        }
+
+        #cookie-banner button {
+            background: #f00;
+            color: #fff;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s, transform 0.3s;
+        }
+
+        #cookie-banner button:hover {
+            background: #ff3333;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- COOKIE BANNER -->
+    <div id="cookie-banner">
+        <p>We use cookies to improve your experience on this website.</p>
+        <button id="accept-cookies">Accept All</button>
+    </div>
+
+    <header id="header">
+        <div class="logo" onclick="scrollToTop()">Agreame</div>
+        <div class="menu-toggle" id="menu-toggle"><span></span><span></span><span></span></div>
+        <nav id="nav">
+            <a href="#about">About</a>
+            <a href="#career">Career</a>
+            <a href="#lifestyle">Lifestyle</a>
+            <a href="#fitness">Fitness</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h1>Agreame</h1>
+        <p>This Is Official Page Of Agreame..</p>
+    </section>
+
+    <section id="about">
+        <h2>About</h2>
+        <p>Hey! Guys, How are you? I hope you all are good and healthy. My name is Agreame Kumar Battan, I'm 16 years
+            old boy who plays football as his passion. I born in middle class family on 3 November 2009 in Village -
+            Barsana, District - Kaithal, State - Haryana, Country - India. I'm Hindu/Sanatani by birth and RoR. I'm very
+            good football player. And I get very good family to live with they are so nice to me when they don't have
+            enough things to afford they do their best they can. I got true friends in my life too and they are trusted
+            because who is my friends they are only my trusted peoples and who I feel like he/she is not trusted I don't
+            make him/her my friend. To contact me email me on my gmail id: agreamebattan08@gmail.com.</p>
+    </section>
+
+    <section id="career">
+        <h2>Career</h2>
+        <p>As you know, I'm a amateur football player who plays for his school team and I guess you are willing to know
+            about my career too. So, Finally I'm going to tell you about my career in this section. Let's go:</p>
+        <p>First I used to play cricket and even I did not know anything about Football but 5 years ago when I was 10-11
+            years old then we shift from rent house to our own home in apartment and nice society and then my father
+            starts building my and my little brother interest in football and then we start knowing about football,
+            players, rules, records and trophies. And now my career is 4 years old and I learned and trained myself alot
+            since I starts playing. I win block level competition two times and get part of 16 players in district
+            matches but unfortunately my school team is weak and we loose from Gurukul nilokheri team and they choose me
+            and one other player as we both played good but did not let us play in 11 and they even did not take me
+            first time in district level competition and now I just wanna make football popular as much as cricket in
+            India too as world and wanna to make our football stars future shines. It's my dream now. I scored 1,500+
+            goals, 800+ assists, 136 highest jugglings in my career. I have pace, shooting, skills, dribbling.</p>
+    </section>
+
+    <section id="lifestyle">
+        <h2>Lifestyle</h2>
+        <p>Let you know about my lifestyle now Let's begin:</p>
+        <p>I'm 11th grade student in India and playing football with study pressure and managing study with training
+            also. If we need to manage all the things we have to made a routine as it's study pressure alot and their is
+            a parents mentality that if you wanna get successed then you should get study only. And it is not our
+            parents problem it's the problem that we kept in under britishers control and now India stands on it's feet
+            and goes in correct hands. India starts rising now and I hope football will also get popular in India soon.
+            I love riding cars, reading history story of bravery and knowledge, getting knowledge of religious books of
+            hindu religion, travelling, riding bikes, mountain climbing, and I have a dream of get in military too and
+            we will see where our future and life will take us because only time and life can decide our future we can
+            just try not sure for anything. It's all depends on our sins and blessings.</p>
+    </section>
+
+    <section id="fitness">
+        <h2>Fitness</h2>
+        <p>It's my interesting part of life and I always wanna be fit and hit and I got inspired by Cristiano Ronaldo to
+            this and I can't just stop playing football even a single day without any serious reason. Football is not
+            just a game or sport, For me it's feeling for me and sports which I can play forever. In fitness, Discipline
+            and consistency is too much important. First know about it's benefits and decide to always do the exercise
+            or training, playing sports not just football whether kabaddi, cricket, hockey and tennis etc. You should
+            give atleast 2-3 hours to your fitness in busy routine and atmost what ever you wanna give to your body you
+            can give. And avoid unhealthy edibles like: Junk food and mixed or chemical edibles. Just eat healthy and
+            meditates yourself and drink boiled water in morning, Wake up early and sleep early too. Don't let anyone
+            come between you and your fitness because when everyone leaves you then only your fitness and your time
+            spend on your body and your body itself helps and stands along with you always.</p>
+    </section>
+    <footer>
+        <div class="footer-container">
+            <div class="footer-left">&copy; 2025 Agreame. All Rights Reserved.</div>
+            <div class="footer-center"></div>
+            <div class="footer-right">
+                <a href="#"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v10/icons/instagram.svg" alt="Instagram"
+                        class="social-icon"></a>
+                <a href="#"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v10/icons/facebook.svg" alt="Facebook"
+                        class="social-icon"></a>
+                <a href="#"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v10/icons/twitter.svg" alt="Twitter"
+                        class="social-icon"></a>
+                <a href="#"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v10/icons/youtube.svg" alt="YouTube"
+                        class="social-icon"></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // HEADER SCROLL
+        const header = document.getElementById('header');
+        window.addEventListener('scroll', () => { if (window.scrollY > 50) header.classList.add('scrolled'); else header.classList.remove('scrolled'); });
+
+        // SMOOTH NAV
+        const navLinks = document.querySelectorAll('nav a');
+        const nav = document.getElementById('nav');
+        const menuToggle = document.getElementById('menu-toggle');
+        navLinks.forEach(a => { a.addEventListener('click', function (e) { e.preventDefault(); document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' }); if (window.innerWidth <= 768) { nav.classList.remove('open'); menuToggle.classList.remove('active'); } }); });
+
+        // SECTION ANIMATION
+        const sections = document.querySelectorAll('section');
+        const observer = new IntersectionObserver(entries => { entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('visible'); } }) }, { threshold: 0.2 });
+        sections.forEach(section => observer.observe(section));
+
+        // BRAND LOGO ANIMATION
+        const brandLogos = document.querySelectorAll('.brand-logo');
+        brandLogos.forEach(logo => observer.observe(logo));
+
+        // LOGO SCROLL TOP
+        function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+
+        // MOBILE MENU
+        menuToggle.addEventListener('click', () => { menuToggle.classList.toggle('active'); nav.classList.toggle('open'); });
+
+        // COOKIE BANNER
+        const cookieBanner = document.getElementById('cookie-banner');
+        const acceptCookiesBtn = document.getElementById('accept-cookies');
+        acceptCookiesBtn.addEventListener('click', () => { cookieBanner.style.display = 'none'; localStorage.setItem('cookiesAccepted', 'true'); });
+        if (localStorage.getItem('cookiesAccepted') === 'true') { cookieBanner.style.display = 'none'; }
+    </script>
+
+</body>
+
+</html>
